@@ -1,65 +1,87 @@
-﻿
-List<string> opponentTurn = new List<string>();
+﻿List<string> opponentTurn = new List<string>();
 List<string> myTurn = new List<string>();
 
-int myTotalPoints = 0;
+int myTotalPoints;
 
-using(StreamReader streamReader = new StreamReader("input.txt"))
+var TYPE_ROCK = 1;
+var TYPE_PAPER = 2;
+var TYPE_SCISSORS = 3;
+
+var LOSE_POINTS = 0;
+var DRAW_POINTS = 3;
+var WIN_POINTS = 6;
+
+
+using (StreamReader streamReader = new StreamReader("input.txt"))
 {
+    myTotalPoints = 0;
     string line;
-    while((line = streamReader.ReadLine()) != null)
+    while ((line = streamReader.ReadLine()) != null)
     {
         string[] split = line.Split(" ");
         opponentTurn.Add(split[0]);
         myTurn.Add(split[1]);
-        AddSelectedPoints(split[1]);
-        AddWinPoints(split[0], split[1]);
+        AddWinPoints(split[1]);
+        AddTypePoints(split[0], split[1]);
         Console.WriteLine(split[0] + " " + split[1]);
     }
     Console.WriteLine("My total points: " + myTotalPoints);
 }
-void AddSelectedPoints(string choice)
+void AddWinPoints(string choice)
 {
-    if (choice == "X")
+    switch (choice)
     {
-        myTotalPoints++;
-    }
-    else if (choice == "Y")
-    {
-        myTotalPoints += 2;
-    }
-    else if (choice == "Z")
-    {
-        myTotalPoints += 3;
+        case "X":
+            myTotalPoints += LOSE_POINTS;
+            break;
+        case "Y":
+            myTotalPoints += DRAW_POINTS;
+            break;
+        case "Z":
+            myTotalPoints += WIN_POINTS;
+            break;
     }
 }
-void AddWinPoints(string opponentTurnChoice, string myTurnChoice)
+//
+// A - ROCK, B - PAPER - C - SCISSORS
+// X - LOSE, Y - DRAW, Z - WIN
+//
+void AddTypePoints(string opponentTurnChoice, string myTurnChoice)
 {
-    if (myTurnChoice == "X" && opponentTurnChoice == "A"  || myTurnChoice == "Y" && opponentTurnChoice == "B" || myTurnChoice == "Z" && opponentTurnChoice == "C")
+    if (opponentTurnChoice == "A" && myTurnChoice == "X")
     {
-        myTotalPoints += 3;
-    } else if(opponentTurnChoice == "A" && myTurnChoice == "Y")
-    {
-        myTotalPoints += 6;
+        myTotalPoints += TYPE_SCISSORS;
     }
-    else if (opponentTurnChoice == "B" && myTurnChoice == "X")
+    else if (opponentTurnChoice == "A" && myTurnChoice == "Y")
     {
-        myTotalPoints += 0;
-    }
-    else if (opponentTurnChoice == "B" && myTurnChoice == "Z")
-    {
-        myTotalPoints += 6;
-    }
-    else if (opponentTurnChoice == "C" && myTurnChoice == "Y")
-    {
-        myTotalPoints += 0;
+        myTotalPoints += TYPE_ROCK;
     }
     else if (opponentTurnChoice == "A" && myTurnChoice == "Z")
     {
-        myTotalPoints += 0;
+        myTotalPoints += TYPE_PAPER;
+    }
+    else if (opponentTurnChoice == "B" && myTurnChoice == "X")
+    {
+        myTotalPoints += TYPE_ROCK;
+    }
+    else if (opponentTurnChoice == "B" && myTurnChoice == "Y")
+    {
+        myTotalPoints += TYPE_PAPER;
+    }
+    else if (opponentTurnChoice == "B" && myTurnChoice == "Z")
+    {
+        myTotalPoints += TYPE_SCISSORS;
     }
     else if (opponentTurnChoice == "C" && myTurnChoice == "X")
     {
-        myTotalPoints += 6;
+        myTotalPoints += TYPE_PAPER;
+    }
+    else if (opponentTurnChoice == "C" && myTurnChoice == "Y")
+    {
+        myTotalPoints += TYPE_SCISSORS;
+    }
+    else if (opponentTurnChoice == "C" && myTurnChoice == "Z")
+    {
+        myTotalPoints += TYPE_ROCK;
     }
 }
